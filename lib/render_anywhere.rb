@@ -18,8 +18,10 @@ module RenderAnywhere
   end
 
   def set_instance_variable(var, value)
-    rendering_controller.class_eval do
-      attr_accessor :"#{var}"
+    unless rendering_controller.respond_to?("#{var}=".to_sym)
+      rendering_controller.class_eval do
+        attr_accessor :"#{var}"
+      end
     end
     rendering_controller.public_send("#{var}=", value)
   end
